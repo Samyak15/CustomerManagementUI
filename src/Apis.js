@@ -1,23 +1,17 @@
 import axiosInstance from "./Helper/AxiosHelper";
 
-const token = sessionStorage.getItem('token');
-
+let token = sessionStorage.getItem('token');
 const config = {
-    headers: { Authorization: `Bearer ${token}`, 'Access-Control-Allow-Origin':'http://localhost:8080','Access-Control-Allow-Headers': 'Content-Type' }
+    Headers: { Authorization: `Bearer ${token}` ,'Access-Control-Allow-Origin':'/','Access-Control-Allow-Headers': 'Content-Type','Content-Type': 'application/json' }
 };
 
 const loginApi = async (email, pwd) => {
-    let response = axiosInstance.post('/auth/login', 
+    let response = axiosInstance.post('http://localhost:8080/auth/login', 
     {
         "email":email,
         "password":pwd
-    },
-    {
-       headers: {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers': 'Content-Type','Content-Type': 'text/plain'},
-       withCredentials:true
-    }
-    );
-    sessionStorage.setItem('token', response.jwtToken);
+    });
+    sessionStorage.setItem('token',(await response).data.jwtToken);
 }
 
 
